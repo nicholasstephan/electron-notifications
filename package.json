@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^25.0.1"
+  },
+  "dependencies": {
+    "@nodert-win10-au/windows.ui.notifications": "^0.4.4"
   }
 }

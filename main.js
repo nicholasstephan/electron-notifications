@@ -1,8 +1,9 @@
 const { app, BrowserWindow, ipcMain, Notification } = require('electron');
+const notifications = require('@nodert-win10-au/windows.ui.notifications');
 const path = require('path');
 
 let win;
-let notifications = [];
+let cache = [];
 
 const createWindow = () => {
   win = new BrowserWindow({
@@ -25,17 +26,49 @@ app.on('window-all-closed', () => {
 
 
 ipcMain.handle('notify', () => {
-  let notification = new Notification({
-    title: 'Basic Notification',
-    body: 'Notification from the Main process',
-  })
+  console.log("Notify");
+  console.log("Platform", process.platform);
 
-  notifications.push(notification);
-  
-  notification.on('click', () => {
-    win.webContents.send('click');
-  });
+  if(process.platform == 'win32') {
 
-  notification.show();
+    let appId = global.appUserModelId; 
+    let notifier = notifications.ToastNotificationManager.createToastNotifier(appId);
+
+    let xmlDocument = `
+      <toast launch='conversationId=9813'>
+        <visual>
+            <binding template='ToastGeneric'>
+                <text>Some text</text>
+            </binding>
+        </visual>
+      </toast>
+    `;
+    let notification = new notifications.ToastNotification(xmlDocument);
+
+    cache.push(notification);
+
+    notification.on('activated', () => {
+      win.webContents.send('click');
+    });
+
+    notifier.show(notification);
+
+  }
+  else {
+
+    let notification = new Notification({
+      title: 'Basic Notification',
+      body: 'Notification from the Main process',
+    })
+
+    cache.push(notification);
+    
+    notification.on('click', () => {
+      win.webContents.send('click');
+    });
+
+    notification.show();
+
+  }
 
 });
