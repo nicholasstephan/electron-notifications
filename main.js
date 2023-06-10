@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, Notification } = require('electron');
 const path = require('path');
 
+if (require('electron-squirrel-startup')) app.quit();
+
 let mainWindow;
 let notifications = [];
 
