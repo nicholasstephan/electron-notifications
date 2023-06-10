@@ -19,8 +19,5 @@
   "build": {
     "appId": "com.electron.electron-notifications",
     "productName": "Toast Notifications Examples"
-  },
-  "dependencies": {
-    "electron-windows-notifications": "^3.0.8"
   }
 }

@@ -1,7 +1,5 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const { ToastNotification } = require('electron-windows-notifications');
+const { app, BrowserWindow, ipcMain, Notification } = require('electron');
 const path = require('path');
-const appId = 'com.electron.electron-notifications';
 
 let mainWindow;
 let notifications = [];
@@ -37,18 +35,11 @@ app.on('window-all-closed', () => {
 
 
 ipcMain.handle('notify', () => {
-  // For demo purpose, distribute notifications into two groups.
-  const group = notifications.length % 2 ? "Group 1" : "Group 2";
   const notifId = notifications.length;
 
-  let notification = new ToastNotification({
-    appId: appId,
-    template: `
+  let notification = new Notification({
+    toastXml: `
       <toast activationType="protocol" launch="myapp://test?notif_id=${notifId}">
-        <header 
-          id="${group}" 
-          title="${group}" 
-          arguments="${group}" />
         <visual>
           <binding template="ToastGeneric">
             <image placement="appLogoOverride" hint-crop="circle" src="C:\\Windows\\IdentityCRL\\WLive48x48.png"/>
@@ -56,9 +47,7 @@ ipcMain.handle('notify', () => {
             <text>This is notification # ${notifId}</text>
           </binding>
         </visual>
-      </toast>`,
-    group,
-    tag: `${notifId}`
+      </toast>`
   });
 
   notifications.push(notification);
