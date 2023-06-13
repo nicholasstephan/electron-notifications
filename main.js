@@ -72,4 +72,10 @@ app.on('second-instance', (_event, argv) => {
     const notifId = link.split("=")[1];
     mainWindow.webContents.send('click', notifId);
   }
+
+  if(mainWindow.isMinimized()) {
+    mainWindow.restore();
+  }
+
+  mainWindow.focus();
 });
