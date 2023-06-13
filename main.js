@@ -78,4 +78,7 @@ app.on('second-instance', (_event, argv) => {
   }
 
   mainWindow.focus();
+  // Workaround for forcing window to be in the forground.
+  mainWindow.setAlwaysOnTop(true);
+  mainWindow.setAlwaysOnTop(false);
 });
